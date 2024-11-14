@@ -4,7 +4,6 @@ import { RouteResolverComponent } from './route-resolver/route-resolver.componen
 import { routeResolverResolver } from './route-resolver/route-resolver.resolver';
 
 export const routes: Routes = [
-    { path: 'todos/:id', component: RouteEffectComponent },
-    { path: 't/:id', component: RouteResolverComponent, resolve: { data: routeResolverResolver } },
-    { path: '', redirectTo: '/t/1', pathMatch: 'full' }
+    { path: 'route-effect/:id', component: RouteEffectComponent },
+    { path: 'route-resolver/:id', component: RouteResolverComponent, resolve: { data: routeResolverResolver } }
 ];

@@ -1,1 +1,21 @@
-<router-outlet />
+<div class="flex flex-col items-center mt-5">
+  <router-outlet />
+  <nav class="flex gap-3 items-center mt-5 border-t border-green-800">
+    <a
+      class="hover:underline no-underline"
+      routerLink="/route-effect/1"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+    >
+      Route Effect
+    </a>
+    <a
+      class="hover:underline no-underline"
+      routerLink="/route-resolver/1"
+      routerLinkActive="active"
+      ariaCurrentWhenActive="page"
+    >
+      Route Resolver
+    </a>
+  </nav>
+</div>

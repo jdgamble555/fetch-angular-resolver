@@ -8,10 +8,10 @@ import { map } from 'rxjs';
   standalone: true,
   imports: [RouterModule],
   template: `
-    <div class="flex flex-col gap-3">
+    <div class="flex flex-col gap-3 items-center">
       <h1>{{ todo()?.title }}</h1>
 
-      <div class="flex gap-3">
+      <div class="flex gap-3 items-center">
         <a class="border p-2 rounded-lg" [routerLink]="['/route-effect', prevId()]">Prev</a>
         <a class="border p-2 rounded-lg" [routerLink]="['/route-effect', nextId()]">Next</a>
       </div>
@@ -20,8 +20,10 @@ import { map } from 'rxjs';
   styles: ``,
 })
 export class RouteEffectComponent {
+
   todo = signal<any>(undefined);
   route = inject(ActivatedRoute);
+
   id = toSignal(this.route.paramMap.pipe(map((params) => params.get('id'))));
 
   prevId = computed(() => Math.max(Number(this.id()) - 1, 1));
@@ -29,8 +31,7 @@ export class RouteEffectComponent {
 
   constructor() {
     effect(() => {
-      const todoId = this.id();
-      fetch(`https://jsonplaceholder.typicode.com/todos/${todoId}`)
+      fetch(`https://jsonplaceholder.typicode.com/todos/${this.id()}`)
         .then((response) => response.json())
         .then((todo) => this.todo.set(todo));
     });

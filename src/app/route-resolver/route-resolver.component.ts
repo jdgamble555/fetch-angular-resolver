@@ -5,6 +5,7 @@ import { injectResolverSignal } from './route-resolver.resolver';
 type Todo = {
   id: number;
   title: string;
+  completed: boolean;
 }
 
 @Component({
@@ -12,10 +13,10 @@ type Todo = {
   standalone: true,
   imports: [RouterModule],
   template: `
-    <div class="flex flex-col gap-3">
+    <div class="flex flex-col gap-3 items-center">
       <h1>{{ todo()?.title }}</h1>
 
-      <div class="flex gap-3">
+      <div class="flex gap-3 items-center">
         <a
           class="border p-2 rounded-lg"
           [routerLink]="['/route-resolver', prevId()]"

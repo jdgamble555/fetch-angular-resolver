@@ -21,10 +21,9 @@ import { map } from 'rxjs';
 })
 export class RouteEffectComponent {
 
-  todo = signal<any>(undefined);
-  route = inject(ActivatedRoute);
+  todo = signal<any>(undefined);  
 
-  id = toSignal(this.route.paramMap.pipe(map((params) => params.get('id'))));
+  id = injectParams('id');
 
   prevId = computed(() => Math.max(Number(this.id()) - 1, 1));
   nextId = computed(() => Number(this.id()) + 1);
@@ -36,4 +35,12 @@ export class RouteEffectComponent {
         .then((todo) => this.todo.set(todo));
     });
   }
+}
+
+
+export function injectParams<T>(key: string) {
+
+  const route = inject(ActivatedRoute);
+
+  return toSignal(route.paramMap.pipe(map((params) => params.get(key))));
 }

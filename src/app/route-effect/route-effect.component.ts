@@ -1,7 +1,13 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { map } from 'rxjs';
+import { Component, computed } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { derivedAsync } from 'ngxtension/derived-async';
+import { injectParams } from 'ngxtension/inject-params';
+
+type Todo = {
+  id: number;
+  title: string;
+  completed: boolean;
+};
 
 @Component({
   selector: 'app-route-effect',
@@ -12,35 +18,35 @@ import { map } from 'rxjs';
       <h1>{{ todo()?.title }}</h1>
 
       <div class="flex gap-3 items-center">
-        <a class="border p-2 rounded-lg" [routerLink]="['/route-effect', prevId()]">Prev</a>
-        <a class="border p-2 rounded-lg" [routerLink]="['/route-effect', nextId()]">Next</a>
+        <a
+          class="border p-2 rounded-lg"
+          [routerLink]="['/route-effect', prevId()]"
+        >
+          Prev
+        </a>
+        <a
+          class="border p-2 rounded-lg"
+          [routerLink]="['/route-effect', nextId()]"
+        >
+          Next
+        </a>
       </div>
     </div>
   `,
   styles: ``,
 })
 export class RouteEffectComponent {
-
-  todo = signal<any>(undefined);  
-
+  
   id = injectParams('id');
 
-  prevId = computed(() => Math.max(Number(this.id()) - 1, 1));
-  nextId = computed(() => Number(this.id()) + 1);
+  idNumber = computed(() => Number(this.id()));
 
-  constructor() {
-    effect(() => {
-      fetch(`https://jsonplaceholder.typicode.com/todos/${this.id()}`)
-        .then((response) => response.json())
-        .then((todo) => this.todo.set(todo));
-    });
-  }
-}
+  todo = derivedAsync<Todo>(() =>
+    fetch(`https://jsonplaceholder.typicode.com/todos/${this.id()}`).then(
+      (response) => response.json()
+    )
+  );
 
-
-export function injectParams<T>(key: string) {
-
-  const route = inject(ActivatedRoute);
-
-  return toSignal(route.paramMap.pipe(map((params) => params.get(key))));
+  prevId = computed(() => Math.max(this.idNumber() - 1, 1));
+  nextId = computed(() => this.idNumber() + 1);
 }

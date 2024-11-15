@@ -1,6 +1,6 @@
 import { Component, computed } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { injectResolverSignal } from './route-resolver.resolver';
+import { injectRouteData } from 'ngxtension/inject-route-data';
 
 type Todo = {
   id: number;
@@ -35,11 +35,11 @@ type Todo = {
   styles: ``,
 })
 export class RouteResolverComponent {
-  // Signal to hold the raw resolved data
-  todo = injectResolverSignal<Todo>('data');
 
-  id = computed(() => this.todo()!.id);
+  todo = injectRouteData<Todo>('data');
 
-  prevId = computed(() => Math.max(this.id() - 1, 1));
-  nextId = computed(() => this.id() + 1);
+  idNumber = computed(() => this.todo()!.id);
+
+  prevId = computed(() => Math.max(this.idNumber() - 1, 1));
+  nextId = computed(() => this.idNumber() + 1);
 }
